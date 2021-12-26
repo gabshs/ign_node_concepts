@@ -88,12 +88,22 @@ app.put('/todos/:id', checksExistsUserAccount, checkExistsTodoByUser, (request, 
   return response.json(todo);
 });
 
-app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+app.patch('/todos/:id/done', checksExistsUserAccount, checkExistsTodoByUser, (request, response) => {
+  const { todo } = request;
+
+  todo.done = true;
+
+  return response.json(todo);
 });
 
-app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+app.delete('/todos/:id', checksExistsUserAccount, checkExistsTodoByUser, (request, response) => {
+  const { user } = request;
+  const { todo } = request;
+
+  user.todos.splice(todo, 1);
+
+  return response.status(204).send();
+
 });
 
 module.exports = app;
